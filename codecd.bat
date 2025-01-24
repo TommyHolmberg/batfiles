@@ -1,3 +1,4 @@
+:: Opens current directory in VS Code
 @echo off
 :: Check if VS Code is installed by checking the `code` command
 where code >nul 2>nul

@@ -1,3 +1,4 @@
+:: Copies current path to clipboard
 @echo off
 :: Check if an argument is provided
 if "%~1"=="" (
