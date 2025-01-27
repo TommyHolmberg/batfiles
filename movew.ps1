@@ -41,6 +41,7 @@ function Get-OpenWindows {
     Select-Object ProcessName, MainWindowTitle, MainWindowHandle
 }
 
+
 function Move-WindowToMouse {
     param (
         [int]$hwnd,
@@ -86,11 +87,16 @@ function Move-WindowToMouse {
     $SWP_NOSIZE = 0x0001
     $HWND_TOPMOST = New-Object -TypeName IntPtr -ArgumentList (-1) # Makes window topmost
     
+    # Adjust the Y-coordinate to place the center of the title bar under the cursor
+    $titleBarHeight = 30  # Approximate height of the title bar, adjust if necessary
+    $newX = $x - ($windowWidth / 2)
+    $newY = $y - $titleBarHeight/2
+    
     $success = [NativeMethods]::SetWindowPos(
         [IntPtr]$hwnd, 
         $HWND_TOPMOST,  # Changed from [IntPtr]::Zero to make it topmost
-        $x - ($windowWidth/2), 
-        $y - ($windowHeight/2), 
+        $newX, 
+        $newY, 
         0, 
         0, 
         $SWP_NOSIZE  # Removed NOZORDER flag to allow z-order changes
@@ -142,7 +148,6 @@ function Is-Admin {
     $principal = New-Object System.Security.Principal.WindowsPrincipal($identity)
     return $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
 }
-
 
 # Check for admin rights. if not admin, elevate and exit.
 if (-not (Is-Admin)) {
