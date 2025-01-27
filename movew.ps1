@@ -1,4 +1,3 @@
-#requires -RunAsAdministrator
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
@@ -148,6 +147,7 @@ function Is-Admin {
     $principal = New-Object System.Security.Principal.WindowsPrincipal($identity)
     return $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
 }
+
 
 # Check for admin rights. if not admin, elevate and exit.
 if (-not (Is-Admin)) {
