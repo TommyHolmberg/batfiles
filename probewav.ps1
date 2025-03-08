@@ -84,16 +84,50 @@ $consoleDataFormat = "{0,-$maxNameLength}`t{1,-10}`t{2,-15}`t{3,-15}`t{4,-15}"
 Write-Host ($consoleHeaderFormat -f $headers)
 Write-Host ($consoleHeaderFormat -f "----", "----", "----", "----", "----")
 
+# Create an array to store the output lines
+$outputLines = @()
+
 # Output the sorted data with blank lines between channel groups
 $currentChannel = $null  # Initialize with a null value
 foreach ($item in $sortedData) {
     if ($item.Channels -ne $currentChannel) {
         if ($currentChannel -ne $null){ # Don't output a line before the first group
             Write-Host ""  # Output blank line
+            $outputLines += ""
         }
         $currentChannel = $item.Channels
     }
-    Write-Host ($consoleDataFormat -f $($item.FileName), $($item.Channels), $($item.SampleFmt), $($item.SampleRate), $($item.BitsPerSample))
+    $line = $consoleDataFormat -f $($item.FileName), $($item.Channels), $($item.SampleFmt), $($item.SampleRate), $($item.BitsPerSample)
+    Write-Host $line
+    $outputLines += $line
 }
 
 Write-Host "Done."
+
+# Function to get an available filename
+function Get-AvailableFilename {
+    param([string]$baseFilename)
+    $counter = 0
+    $extension = ".txt"
+    $filename = $baseFilename + $extension
+    
+    while (Test-Path $filename) {
+        $counter++
+        $filename = "$baseFilename$counter$extension"
+    }
+    
+    return $filename
+}
+
+# Save the output to a file
+$baseFilename = "formats"
+$outputFile = Get-AvailableFilename -baseFilename $baseFilename
+
+# Add headers to the output file
+$outputLines = @(
+    ($consoleHeaderFormat -f $headers),
+    ($consoleHeaderFormat -f "----", "----", "----", "----", "----")
+) + $outputLines
+
+$outputLines | Out-File -FilePath $outputFile -Encoding UTF8
+Write-Host "Output saved to $outputFile"
