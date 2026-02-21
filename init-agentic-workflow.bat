@@ -18,7 +18,7 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 :: 3. Define Source (Update this to your public repo)
-set "REPO_URL=https://raw.githubusercontent.com/TommyHolmberg/agentic-github-workflow/refs/heads/main/agentic-development-protocol.md"
+set "REPO_URL=https://raw.githubusercontent.com/TommyHolmberg/agentic-github-workflow/main"
 
 :: 4. Download Master Instructions
 echo [Agentic-Init] Fetching agentic-development-protocol.md...
