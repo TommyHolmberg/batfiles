@@ -10,6 +10,26 @@ REM Parse arguments
 set REPO=
 :parse
 if "%~1"=="" goto afterparse
+if /i "%~1"=="--help" (
+    echo.
+    echo  get-vscode-ext - Download and install the latest VSIX from a GitHub Release
+    echo.
+    echo  USAGE:
+    echo    get-vscode-ext ^<repo^> [-u ^<username^>]
+    echo.
+    echo  ARGUMENTS:
+    echo    ^<repo^>           GitHub repository name (required^)
+    echo.
+    echo  OPTIONS:
+    echo    -u ^<username^>    GitHub username (default: TommyHolmberg^)
+    echo    --help           Show this help message
+    echo.
+    echo  EXAMPLES:
+    echo    get-vscode-ext Kaptin
+    echo    get-vscode-ext Kaptin -u OtherUser
+    echo.
+    exit /b 0
+)
 if /i "%~1"=="-u" (
     shift
     set USERNAME=%~1
